@@ -23,6 +23,22 @@ class EnchereRepository {
             return {};
         }
     }
+
+    async addEnchere(articleId, userId, montant) {
+
+        try {
+            const enchere = await this.db.encheres.create({
+                articleId: articleId,
+                userId: userId,
+                montant: montant
+            });
+            logger.info(enchere);
+            return enchere;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
+    }
 }
 
 module.exports = new EnchereRepository();

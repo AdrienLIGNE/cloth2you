@@ -3,30 +3,41 @@ import { getDerniereOffre } from '../services/EnchereService';
 import { useState, useEffect } from 'react';
 import moment from 'moment';
 import Timer from './Timer';
+import getUserConnecte from '../services/AuthService';
+import { addEnchere } from '../services/EnchereService';
 
 function Encherir({ article, vendeur, nbLikes }) {
 
     const pfpImageExample = require('../static/images/pfp-image-example.jpeg');
-    
-    const [offreActuelle, setOffreActuelle] = useState(0.00);
+    const [offreActuelle, setOffreActuelle] = useState(null);
+    const [placeholderPrixForm, setPlaceholderPrixForm] = useState("Chargement...");
+    const [propositionPrix1, setPropositionPrix1] = useState(0);
+    const [propositionPrix2, setPropositionPrix2] = useState(0);
+    const [propositionPrix3, setPropositionPrix3] = useState(0);
+    const endDate = moment(article.createdAt).add(7, 'days');
+    const articleTags = {"col": article.couleurs.split(","), "mat": article.materiaux.split(","), "taille": article.taille};
+    const [montantInput, setMontantInput] = useState("");
+
     useEffect(() => {
         if (article) {
             getDerniereOffre(article.id).then((enchere) => {
                 setOffreActuelle(enchere);
             })
         }
-    }, [])
-    
+    }, []);
+    useEffect(() => {
+        if (offreActuelle) {
+            setPropositionPrix1(offreActuelle.montant + offreActuelle.montant*0.1);
+            setPropositionPrix2(offreActuelle.montant + offreActuelle.montant*0.5);
+            setPropositionPrix3(offreActuelle.montant + offreActuelle.montant);
+            setPlaceholderPrixForm(`${offreActuelle.montant + offreActuelle.montant*0.1}€ ou plus`);
+        }
+    }, [offreActuelle]);
 
-    const placeholderPrixForm = `${offreActuelle.montant + offreActuelle.montant*0.1}€ ou plus`;
-    const propositionPrix1 = offreActuelle.montant + offreActuelle.montant*0.1;
-    const propositionPrix2 = offreActuelle.montant + offreActuelle.montant*0.5;
-    const propositionPrix3 = offreActuelle.montant + offreActuelle.montant;
-    const heroPrixActuel = parseFloat(offreActuelle.montant);
-    const endDate = moment(article.createdAt).add(7, 'days');
-    
-
-    const articleTags = {"col": article.couleurs.split(","), "mat": article.materiaux.split(","), "taille": article.taille};
+    const handleSurenchere = () => {
+        console.log(article);
+        addEnchere(1, 50);
+    }
 
     return (
 
@@ -48,7 +59,7 @@ function Encherir({ article, vendeur, nbLikes }) {
                         <div className="top flex justify-between items-start">
                             <div className="prix flex flex-col">
                                 <p className="font-chivo text-gray-500 text-lg">Offre actuelle</p>
-                                <p className="text-6xl">{heroPrixActuel}€</p>
+                                {offreActuelle && <p className="text-6xl">{offreActuelle.montant}€</p>}
                                 <p className="text-gray-500 text-lg">Avec prix de réserve</p>
                             </div>    
                             
@@ -76,9 +87,9 @@ function Encherir({ article, vendeur, nbLikes }) {
                                 <button className="bg-zinc-400 hover:bg-zinc-300 w-1/3 rounded-lg h-10 text-xl">{propositionPrix2}€</button>
                                 <button className="bg-zinc-500 hover:bg-zinc-400 w-1/3 rounded-lg h-10 text-xl">{propositionPrix3}€</button>
                             </div>
-                            <input className="mt-3 bg-zinc-200 rounded-lg h-12 px-4 focus:outline-none hover:bg-zinc-200 text-xl" type="text" placeholder={placeholderPrixForm}/>
+                            <input className="mt-3 bg-zinc-200 rounded-lg h-12 px-4 focus:outline-none hover:bg-zinc-200 text-xl" placeholder={placeholderPrixForm} type="number" value={montantInput} onChange={e => setMontantInput(e.target.value)}/>
                             <div className="enchere-ou-offre-maximale flex mt-3 gap-4">
-                                <button className="bg-zinc-300 hover:bg-zinc-200 w-full rounded-lg h-10 text-xl">Enchérir</button>
+                                <button className="bg-zinc-300 hover:bg-zinc-200 w-full rounded-lg h-10 text-xl" onClick={() => handleSurenchere()}>Enchérir</button>
                             </div>
 
                             <p className="description text-justify mt-6">{article.description}</p>

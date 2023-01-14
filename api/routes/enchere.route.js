@@ -10,4 +10,8 @@ module.exports = (app) => {
   });
 
   app.get("/api/enchere/articleId/:articleId",enchereController.getDerniereOffre);
+
+  app.get("/api/enchere/create", [authJwt.verifyToken, authJwt.isAcheteur], enchereController.addEnchere, () => {
+    console.log("addEncheremqoigdhjso^qg");
+  });
 };
