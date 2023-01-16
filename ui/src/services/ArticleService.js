@@ -7,4 +7,3 @@ export async function getNbLikeArticle(articleId) {
     const response = await fetch(`/api/article/${articleId}/likes`);
     return await response.json();
 }
-

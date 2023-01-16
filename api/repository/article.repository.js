@@ -36,9 +36,7 @@ class ArticleRepository {
                 console.log(err);
                 return {};
             }
-    }
- 
-        
+        }
 }
 
 module.exports = new ArticleRepository();

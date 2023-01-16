@@ -17,4 +17,8 @@ module.exports = (app) => {
   
   app.get("/api/article/:id",articleController.getArticle);
 
+  
+
+  
+  
 };
