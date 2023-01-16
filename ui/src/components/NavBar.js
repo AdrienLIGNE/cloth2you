@@ -26,20 +26,20 @@ function NavBar() {
 
     return (
         <div>
-            <nav className="h-14 bg-black w-full flex justify-around items-center font-outfit">
+            <nav className="h-16 bg-zinc-800 w-full flex justify-around items-center font-outfit gap-2">
 
                 < NavLink to="/" className="logo flex h-full items-center active:bg-non">
                     <img src={logoCloth2youInverse} alt="logo" className="h-1/2"/>
                     <h2 className="font-gowun text-2xl text-white sm:block hidden">cloth2you</h2>
                 </NavLink>
 
-                < NavLink to="/profil" className="text-white hover:text-zinc-400 lg:block hidden">Profil</NavLink>
-                < NavLink to="/vendre" className="text-white hover:text-zinc-400 lg:block hidden">Vendre</NavLink>
+                < NavLink style={{ backgroundColor: "rgb(39, 39, 42)" }} to="/profil" className="text-amber-50 hover:text-amber-100 lg:block hidden">Profil</NavLink>
+                < NavLink style={{ backgroundColor: "rgb(39, 39, 42)" }} to="/vendre" className="text-amber-50 hover:text-amber-100 lg:block hidden">Vendre</NavLink>
 
                 <div className="recherche bg-zinc-100 w-1/2 h-1/2 rounded-xl flex items-center ease-in duration-100 sm:max-w-48">
                     <img src={iconeLoupe} alt="loupe" className="h-3/4 px-2"/>
                     <form action="recherche.html" className="w-full">
-                        <input type="text" placeholder="Recherche..." className="w-full rounded-xl focus:outline-none"/>
+                        <input type="text" placeholder="Rechercher" className="w-full rounded-r-xl bg-amber-50 focus:outline-none placeholder-zinc-800"/>
                     </form>
                 </div>
 
