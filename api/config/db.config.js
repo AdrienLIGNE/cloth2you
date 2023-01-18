@@ -10,11 +10,10 @@ const connect = () => {
     const userName = process.env.DB_USER;
     const password = process.env.DB_PASSWORD;
     const database = process.env.DB_NAME;
-    const dialect = process.env.DB_DIALECT;
 
     const sequelize = new Sequelize(database, userName, password, {
         host: hostName,
-        dialect: dialect,
+        dialect: 'postgres',
         port: process.env.DB_PORT,
         logging: false,
         pool: {
@@ -34,6 +33,7 @@ const connect = () => {
     db.articles = require("../model/article.model")(sequelize, DataTypes, Model);
     db.images = require("../model/image.model")(sequelize, DataTypes, Model);
     db.encheres = require("../model/enchere.model")(sequelize, DataTypes, Model);
+    db.likes = require("../model/like.model")(sequelize, DataTypes, Model);
 
     db.ROLES = ['vendeur','acheteur','admin']
 
@@ -74,6 +74,18 @@ const connect = () => {
     db.reports.belongsTo(db.users, {
         as: 'reported',
     })
+
+    // Likes / Favoris
+    db.likes.belongsTo(db.users, {
+    })
+    db.likes.belongsTo(db.articles, {
+    })
+    db.users.hasMany(db.likes)
+    db.articles.hasMany(db.likes)
+
+    const fs = require('fs');
+
+    
    
 
     return db;

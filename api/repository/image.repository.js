@@ -17,8 +17,20 @@ class ImageRepository {
                     articleId: articleId
                 },
             });
-            console.log('images:::', images);
             return images;
+        } catch (err) {
+            console.log(err);
+            return {};
+        }
+    }
+
+    async uploadImage(url, articleId) {
+        try {
+            console.log("uploadImage repository, url: " + url + " articleId: " + articleId);
+            const newImage = await this.db.images.create({url}).then((image) => {
+                image.setArticle(articleId);
+            });
+            return newImage;
         } catch (err) {
             console.log(err);
             return {};

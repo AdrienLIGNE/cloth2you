@@ -16,8 +16,10 @@ class EnchereRepository {
                 where: {
                     articleId: articleId
                 },
+                order: [
+                    ['createdAt', 'DESC']
+                  ],
             });
-            console.log('enchere:::', enchere);
             return enchere;
         } catch (err) {
             console.log(err);

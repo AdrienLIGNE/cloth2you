@@ -1,29 +1,80 @@
 import React from 'react';
 import Encherir from '../components/Encherir';
 import { useState, useEffect } from 'react';
-import { getArticle } from '../services/ArticleService'
+import { getArticle, getNbLikeArticle } from '../services/ArticleService'
+import { getUserById } from '../services/UserService'
+import { getArticleImagesByArticleId } from '../services/ImageService';
+import ImageCarousel from '../components/ImageCarousel';
+import NavBar from '../components/NavBar'
+import NotFoundErrorPage from './NotFoundErrorPage';
+import { useParams } from 'react-router-dom';
 
 function PageArticle() {
 
-  const [prix, setPrix] = useState();
+  const [article, setArticle] = useState(null);
+  const [vendeur, setVendeur] = useState(null);
+  const [images, setImages] = useState(null);
+  const [imagesLoaded, setImagesLoaded] = useState(false);
+  const [nbLikesConst, setNbLikesConst] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const idPassed = useParams().id;
+
+
 
   useEffect(() => {
-    getArticle(1).then((article) => {
-      console.log("react");
-      setPrix(article.prix_depart);
-      
+    getArticle(idPassed).then((response) => {
+      if (response.message) {
+        setError(response.message);
+        setIsLoading(false);
+      } else {
+        setArticle(response);
+        setIsLoading(false);
+      }
+    })
+    .catch(() => {
+      setError('Error connecting to server. Please try again later.');
     });
-  }, []);
-  
+  }, [idPassed]);
+
+  useEffect(() => {
+    if (article) {
+      getArticleImagesByArticleId(article.id).then((images) => {
+        setImages(images.map(image => ({image: image.url, caption: ""})));
+        setImagesLoaded(true);
+      });
+    }
+  }, [article]);
+
+  useEffect(() => {
+    if (article) {
+      getUserById(article.vendeurId).then((vendeur) => {
+        setVendeur(vendeur);
+        
+      });
+    }
+  }, [article]);
   
   return (
-    <div>
-        <main className='contenu sm:px-20 pt-5 flex flex-row flex-wrap font-outfit'>
-            <section className="gauche w-1/2 bg-gray-100">
-
-            </section>
-            <Encherir prix={prix}/>
-        </main>
+    <div className="bg-zinc-100 h-screen">
+        {isLoading ? (
+          <div className="text-center">Loading...</div>
+        ) : (
+          error ? (
+            <NotFoundErrorPage />
+          ) : (
+            <>
+              <NavBar/>
+              <main className='contenu sm:mt-16 mt-0 flex flex-row flex-wrap font-outfit w-screen'>
+                <section className="gauche sm:w-1/2 w-full flex justify-center mt-10 mb-10">
+                  {imagesLoaded && <ImageCarousel images={images}/>}
+                </section>
+                {article && vendeur && <Encherir article={article} vendeur={vendeur}/>}
+              </main>
+            </>
+          )
+        )}
     </div>
   );
 }

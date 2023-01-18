@@ -1,18 +1,29 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:3080/api/auth/";
-
-const register = (login, email, password) => {
-  return axios.post(API_URL + "signup", {
+const registerAcheteur = (login, email, password) => {
+  return axios.post("/api/auth/signup", {
     login,
     email,
     password,
+    role_id: 2,
+  });
+};
+
+const registerVendeur = (login, email, password, num_siren,nom, prenom) => {
+  return axios.post("/api/auth/signup", {
+    login,
+    email,
+    password,
+    role_id : 1,
+    num_siren,
+    nom,
+    prenom
   });
 };
 
 const login = (login, password) => {
   return axios
-    .post(API_URL + "signin", {
+    .post("/api/auth/signin", {
       login,
       password,
     })
@@ -20,7 +31,6 @@ const login = (login, password) => {
       if (response.data.accessToken) {
         localStorage.setItem("user", JSON.stringify(response.data));
       }
-      return response.data;
     });
 };
 
@@ -35,7 +45,8 @@ const getCurrentUser = () => {
 };
 
 const AuthService = {
-  register,
+  registerAcheteur,
+  registerVendeur,
   login,
   logout,
   getCurrentUser,

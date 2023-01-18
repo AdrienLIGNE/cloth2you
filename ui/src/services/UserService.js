@@ -6,11 +6,47 @@ export async function getUsers() {
     return await response.json();
 }
 
-export async function getUser(login) {
-    const response = await fetch(`/api/users/${login}`);
+export async function getUserByLogin(login) {
+    const response = await fetch(`/api/users/login/${login}`);
     return await response.json();
 }
+
+export async function getUserById(id) {
+    const response = await fetch(`/api/users/id/${id}`);
+   return await response.json();
+   
+}
+
+export async function getArticlesWonbyUserId(id) {
+    const response = await fetch(`/api/users/${id}/encheregagnee`);   
+    return await response.json();
+}
+
+export async function getArticlesSoldbyUserId(id){
+    const response = await fetch("/api/users/1/encherevendue"); 
+    const data = await response.json();
+    console.log(data);
+    return data;
+}
+
 
 export function getVendre(){
     return axios.get("/api/vendre", { headers: authHeader() });
 }
+
+export function getProfileInfos(){
+    return axios.get("/api/profil", { headers: authHeader() });
+}
+
+export function updateSolde(userId, newSolde) {
+    return axios.put(`/api/users/${userId}/solde`, { solde: newSolde })
+    .then(response => {
+        console.log('Solde updated successfully!');
+        return response.data;
+    })
+    .catch(error => {
+        console.log('Error updating solde:', error);
+        throw error;
+    });
+}
+
