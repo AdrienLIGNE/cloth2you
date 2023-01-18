@@ -9,7 +9,7 @@ import AuthService from "../services/AuthService";
 import Modal from "../components/Modal";
 
 
-const WS_URL = "ws://127.0.0.1:8000"; // à changer en prod
+const WS_URL = "ws://192.168.14.221:8000"; // à changer en prod
 
 function Encherir({ article, vendeur }) {
   const pfpImageExample = require("../static/images/pfp-image-example.jpeg");
