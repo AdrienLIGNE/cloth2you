@@ -21,8 +21,6 @@ function PageArticle() {
 
   const idPassed = useParams().id;
 
-
-
     useEffect(() => {
         getArticle(idPassed)
             .then((response) => {
@@ -41,6 +39,7 @@ function PageArticle() {
 
     useEffect(() => {
         if (article) {
+          console.log(article.id);
             getArticleImagesByArticleId(article.id).then((images) => {
                 setImages(
                     images.map((image) => ({ image: image.url, caption: '' }))

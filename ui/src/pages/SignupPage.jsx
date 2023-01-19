@@ -48,8 +48,6 @@ const handleEyeConf = (e) => {
   }
 };
 
-
-
   //fonctions pour gérer les changements des champs du formulaire et les boutons cliqués
   const handleCguChange = (e) => {
     setCguChecked(e.target.checked);
@@ -74,7 +72,8 @@ const handleEyeConf = (e) => {
   const onChangeEmail = (e) => {
     e.preventDefault();
     const email = e.target.value;
-    let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
+    //regex pour vérifier que l'email est valide
+    let regex = new RegExp("^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,6}$");
     if(!regex.test(email)){
       setMessage("Veuillez entrer une adresse email valide");
     }else{
@@ -86,7 +85,8 @@ const handleEyeConf = (e) => {
   const onChangePassword = (e) => {
     e.preventDefault();
     const password = e.target.value;
-    const regex = new RegExp('(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$"');
+    //regex pour vérifier que le mot de passe contient au moins 8 caractères, une majuscule, une minuscule et un chiffre
+    const regex = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})');
     if(!regex.test(password)){
       setMessage("Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre");
     }else{
@@ -161,7 +161,7 @@ const handleEyeConf = (e) => {
         e.preventDefault();
         AuthService.registerAcheteur(pseudo, email, password)
           .then(() => {
-            navigate("/"); //redirection vers la page d'accueil
+            navigate("/connexion"); //redirection vers la page d'accueil
             window.location.reload();
           })
           .catch((err) => {

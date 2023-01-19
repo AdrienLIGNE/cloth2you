@@ -14,12 +14,13 @@ const WS_URL = "ws://192.168.14.221/ws/"; // à changer en prod
 
 function Encherir({ article, vendeur }) {
 
-  const pfpImageExample = require("../static/images/pfp-image-example.jpeg");
-
   const [offreActuelle, setOffreActuelle] = useState(0.0);
   const [message, setMessage] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [avatar, setAvatar] = useState(
+    require("../static/images/default-avatar.png")
+  );
 
   const ws = useRef(null);
 
@@ -70,6 +71,17 @@ function Encherir({ article, vendeur }) {
       });
     }
   }, [article]);
+
+  /* RECUPERATION DE LA PDP */
+
+  useEffect(() => {
+    if (vendeur) {
+      if (vendeur.pdp !== null) setAvatar(`${vendeur.pdp}`);
+    }
+  }, [vendeur]);
+
+
+
 
   /* RECUPERATION DE L'USER */
 
@@ -125,7 +137,13 @@ function Encherir({ article, vendeur }) {
     categorie: article.categorie,
   };
   const [isArticleLiked, setIsArticleLiked] = useState(false);
+
   function handleClickLike() {
+    //si l'utilisateur n'est pas connecté on affiche un message
+    if (!user) {
+      setMessage("Vous devez être connecté pour liker un article");
+      return;
+    }
     setIsArticleLiked(!isArticleLiked);
     if (isArticleLiked) {
       removeLike(article.id);
@@ -220,7 +238,7 @@ function Encherir({ article, vendeur }) {
           <div className="profil mt-6 flex flex-row items-center">
             <img
               className="w-20 h-20 rounded-full"
-              src={pfpImageExample}
+              src={avatar && avatar}
               alt="photo-profil"
             />
             <div className="text-profil flex flex-row flex-wrap items-center">
