@@ -9,7 +9,6 @@ class AuthController{
 //enregistrement
 signup = (req, res) => {
   // Enregistrer l'utilisateur en bdd
-  console.log(req.body)
   bcrypt.hash(req.body.password, 10).then(hash => {
     const user = {
       login: req.body.login,
