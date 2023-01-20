@@ -16,7 +16,7 @@ signup = (req, res) => {
       password: hash,
       roleId: req.body.role_id,
     }
-    if (req.params.nom){
+    if (req.body.nom){
       user.nom = req.body.nom
       user.prenom = req.body.prenom
       user.siren = req.body.siren
