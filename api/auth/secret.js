@@ -1,0 +1,1 @@
+module.exports = 'clePrivee123Soleilcloth2you'
