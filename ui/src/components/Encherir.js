@@ -9,7 +9,7 @@ import AuthService from "../services/AuthService";
 import Modal from "../components/Modal";
 import { getUserById } from "../services/UserService";
 import { isArticleLikedByUser, createLike, removeLike } from "../services/LikeService";
-const WS_URL = "ws://192.168.14.221/ws/"; // à changer en prod
+const WS_URL = "wss://192.168.14.221/ws/"; 
 
 
 function Encherir({ article, vendeur }) {
